@@ -34,7 +34,8 @@ const Addmoney = () => {
     <div className='addleft'>
     <h2 className='colorful-text'>Withdraw History</h2>
       <div>
-      {withdraw.map((singleWithdraw)=>{
+      {withdraw.length===0?<div> <h2 style={{margin:"2rem 0"}}>you have not make any withdrawal</h2>
+      <Link to='/product' className='btn'>Check Marketplace{'>>>'}</Link> </div>: withdraw.map((singleWithdraw)=>{
         const {amountInEth,userAddress,paymentMethod,amountWitdraw,_id,status}=singleWithdraw
         return(
           <div key={_id}>
@@ -57,7 +58,8 @@ const Addmoney = () => {
     <h2 className='colorful-text'>Sales History</h2>
 
       <div>
-      {sales.map((singleSale)=>{
+      {sales.length===0?<div> <h2 style={{margin:"2rem 0"}}>Sorry you do not make any sale</h2>
+      <Link to='/product' className='btn'>Check Marketplace{'>>>'}</Link> </div>: sales.map((singleSale)=>{
         const {_id,name,image,price,description}=singleSale
         return(
           <div key={_id}>
