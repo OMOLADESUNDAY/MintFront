@@ -25,6 +25,12 @@ import ProtectedRoute from './component/ProtectedRoute';
 import ForgotPassword from './component/ForgotPassword';
 import UpdatePassword from './component/UpdatePassword';
 import Products from './component/Products';
+import CreateAsset from './component/CreateAsset';
+import Withdraw from './component/Withdraw';
+import Addmoney from './component/Addmoney';
+import Metamask from './component/Metamask';
+import Coinbase from './component/Coinbase';
+import Binance from './component/Binance';
 
 function App() {
   return (
@@ -50,7 +56,12 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/api/resetpassword/:token" element={<UpdatePassword />} />
         <Route path="/product" element={<Products />} />
-        
+        <Route path="/createasset" element={<ProtectedRoute><CreateAsset /></ProtectedRoute>} />
+        <Route path="/withdraw" element={<ProtectedRoute><Withdraw /></ProtectedRoute>} />
+        <Route path="/checksales" element={<ProtectedRoute><Addmoney/></ProtectedRoute>} />
+        <Route path="/metamask" element={<ProtectedRoute><Metamask/></ProtectedRoute>} />
+        <Route path="/coinbase" element={<ProtectedRoute><Coinbase/></ProtectedRoute>} />
+        <Route path="/binance" element={<ProtectedRoute><Binance/></ProtectedRoute>} />
       </Routes>
      
     </div>

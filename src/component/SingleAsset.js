@@ -13,6 +13,8 @@ import Frame3 from "../image/Frame 3.jpg"
 import { SERVERMACHINE } from './envconfig';
 import Footer from './Footer';
 
+
+
 const reducer=(state,action)=>{
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -58,6 +60,13 @@ const SingleAsset = () => {
   const {state, dispatch:ctxDispatch}=useContext(Store)
   const {cart} =state
   // console.log(cart)
+  // useEffect(()=>{
+  //   const getOwner=async()=>{
+  //     const response=await axios.get(`${SERVERMACHINE}/api/owner/id/${product.userId}`);
+  //     const {data}=response
+  //   }
+     
+  // })
   const AddToCartHandler= async ()=>{
     console.log(cart)
     const existItem=cart.cartItems.find((x)=>x._id===product._id)
@@ -73,6 +82,7 @@ const SingleAsset = () => {
     ctxDispatch({type:"CART_ADD_ITEM",payload:{...product,quantity}})
     navigate('/notification')
   }
+  
   if (loading){
     return(
       <div className='loading__center'>
@@ -94,6 +104,8 @@ const SingleAsset = () => {
           <img src={dimag} alt={product.name} />
         </div>
         <div className='centerSingleProduct'>
+        <h3 className='blur'> Asset Owner</h3>
+            <h1>{product.ownerName}</h1>
             <h3 className='blur'> Asset Name</h3>
             <h1>{product.name}</h1>
            <h3 className='blur'>total volume</h3>
@@ -103,7 +115,7 @@ const SingleAsset = () => {
         <div className='rightSingleProduct'>
           <div className='downdown'>
           <p>price: ${product.price}</p>
-            <p>Status: <small className={product.countInStock > 0 ? 'available':'outofstock'}>{product.countInStock > 0 ? 'InStock':'outofstock'}</small></p>
+            <p>Status: <small className= 'available'>InStock</small></p>
           </div>
           
             

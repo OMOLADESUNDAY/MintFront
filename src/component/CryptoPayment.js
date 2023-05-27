@@ -13,7 +13,7 @@ import Footer from './Footer';
 const CryptoPayment = () => {
  
   const {state}=useContext(Store);
-  console.log(state)
+ 
   const {userInfo,cart}=state
   const [ethPrice,setEthPrice]=useState()
   const totalPrice=state.cart.cartItems.reduce((a,c)=>a+c.price * c.quantity,0)
@@ -33,7 +33,6 @@ const CryptoPayment = () => {
             const ethPricee=totalPrice / currentDollar
             const ethPrice=Number(ethPricee.toFixed(18));
             setEthPrice(ethPrice)
-            console.log(ethPrice)
           }
          }
         } catch (error) {
@@ -65,11 +64,11 @@ const CryptoPayment = () => {
 
 		const  provider = new  ethers.providers.Web3Provider(window.ethereum);
     const network = await provider.getNetwork();
-    if (network.chainId !== 1) {
-      alert('Please switch to the Ethereum mainnet')
-      throw new Error('Please switch to the Ethereum mainnet');
-    }
-    else{
+    // if (network.chainId !== 1) {
+    //   alert('Please switch to the Ethereum mainnet')
+    //   throw new Error('Please switch to the Ethereum mainnet');
+    // }
+    // else{
       const  signer = provider.getSigner();
 
 		ethers.utils.getAddress(destinationAddress);
@@ -84,7 +83,12 @@ const CryptoPayment = () => {
     if(transactionResponse){
       
       const transactiondata={userId:userInfo._id,totalPrice:totalPrice,ethPrice:ethPrice ,transactionResponse:transactionResponse,asset:cart.cartItems}
-     
+      // const sales={sale:cart.cartItems}
+      // try {
+      //   const saleResponse=await axios.post(`${SERVERMACHINE}/api/transaction`,sales)
+      // } catch (error) {
+        
+      // }
       try {
         const response=await axios.post(`${SERVERMACHINE}/api/transaction`,transactiondata)  
         if(response){
@@ -92,6 +96,17 @@ const CryptoPayment = () => {
           if(addToRecentSold){
             for (let index = 0; index < cart.cartItems.length; index++) {
               const element = cart.cartItems[index];
+              console.log(element)
+              await axios.post(`${SERVERMACHINE}/api/sales`,element)
+              const price={price:element.price}
+             
+              try {
+                await axios.patch(`${SERVERMACHINE}/api/updatebalance/${element.userId}`,price)
+              
+              } catch (error) {
+                console.log(error)
+              }
+              
               // const dd={element}
               await axios.delete(`${SERVERMACHINE}/api/removeProduct/${element._id}`)
               // await axios.post(`http://localhost:5000/api/removeProduct`,dd)
@@ -118,10 +133,11 @@ const CryptoPayment = () => {
         alert('there was an error')        
       } 
     }
-    }
+    // }
    
     // usrid,product purchase,transaction response
 	} catch (error) {
+    
     toast.error(getError(error))
     setTransactionError(error.message)
     const removeErrorMessage = () => {

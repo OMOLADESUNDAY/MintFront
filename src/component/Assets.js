@@ -30,7 +30,7 @@ function convertImageUrlToBase64(imageUrl) {
 const Assets = () => {
   const [imageUrl, setImageUrl] = useState('https://res.cloudinary.com/dkzuuda7n/image/upload/v1680255027/x4nycckcho7ddiizktj9.png');
   const [base64String, setBase64String] = useState('');
-  
+  const [balance,setBalance]=useState(0.00)
     useEffect(() => {
       async function fetchData() {
         try {
@@ -71,6 +71,8 @@ const Assets = () => {
         try {
           // const response=await axios.get(`http://localhost:5000/api/asset/user/${userInfo._id}`)
           const response=await axios.get(`${SERVERMACHINE}/api/asset/user/${userInfo._id}`);
+          const balanceResponse=await axios.get(`${SERVERMACHINE}/api/asset/user/balance/${userInfo._id}`);
+          setBalance(balanceResponse.data.balance)
           dispatch({type:"FETCH_SUCCESS",payload:response.data})
           
         
@@ -79,7 +81,7 @@ const Assets = () => {
         }
       }
       FetchData() 
-  },[userInfo._id])
+  },[userInfo._id,balance])
   
   const [disableDownload,setDisableDownload]=useState(true)
   const chechRef=useRef()
@@ -91,7 +93,6 @@ const Assets = () => {
       setDisableDownload(false)
     }
   }
-  console.log(asset)
   if(loading){
     return (
       <div className='loading__center'>
@@ -107,23 +108,40 @@ const Assets = () => {
     return (
       <div className='container'>
         <Navbar/>
+        <div className='createasset'>
+        <div className='flexdown'>
+        <Link to='/createasset' className='btn'>Create Asset</Link>
+        <Link to='/checksales' className='btn'>Check Sales</Link>
+        </div>
+          
+          <div>
+            <div className='flex'>
+              <p>balance:</p>
+              <p><b>${balance}</b></p>
+            </div>
+            <div className='withdraw'>
+              <Link to='/withdraw' className='btn '>Withdraw</Link>
+            </div>
+          </div>
+        </div>
+        <h2 className='assetTexth colorful-text'>My Asset</h2>
         <section className=' assetContainer'>
           {asset.length === 0?<div> <h2 style={{margin:"2rem 0"}}>Sorry you do not have an asset</h2>
-          <Link to='/product' className='btn'>Go Shopping{'>>>'}</Link> </div>:<div>{ asset.map((data)=>{
-            const {_id,name,image,rating,no_of_review}=data
+          <Link to='/product' className='btn'>Go Shopping{'>>>'}</Link> </div>:<div>{ asset.map((data,index)=>{
+            const {name,image,price}=data
             return(
-              <article key={_id} className='singleAssetContainer'>
+              <article key={index} className='singleAssetContainer'>
               <div className='leftImageContainer'>
               <img src={image} alt={name}/>  
             </div>
             <div className='RightImageContainer'>
               <small className='assetSmall'>Asset Name</small>
-              <div className='nametotal'><h2 className='assetName'>{name}</h2><h2 className='assetName'>{`+${rating}`}</h2></div>
+              <div className='nametotal'><h2 className='assetName'>{name}</h2><h2 className='assetName'>{`+${price}`}</h2></div>
               
               <small className='assetSmall'>Total Volume</small>
               <input  type="checkbox" ref={chechRef}  className='check' onClick={()=>handleDat(image)} />
-              <h3 className='volume'>{no_of_review}</h3> 
-              <a href={`${base64String}`} ref={downloadRef} download  className={disableDownload ? 'btn sellBtn disableDownlaod' : 'btn sellBtn '} >Get Art</a>
+              <h3 className='volume'>{price}</h3> 
+              <a href={`${base64String}`} ref={downloadRef} download  className={disableDownload ? 'btn sellBtn disableDownlaod' : 'btn sellBtn '} >Get NFT</a>
             </div>
           </article>
             )

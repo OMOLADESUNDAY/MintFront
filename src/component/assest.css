@@ -49,6 +49,28 @@
 .RightImageContainer{
     padding-top: 2rem;
 }
+.createasset{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+   
+}
+.flexdown{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.withdraw{
+    margin-top:2rem;
+}
+.flex{
+    display: flex;
+    gap: 1rem;
+}
+.assetTexth{
+    text-align: center;
+    margin: 4rem;
+}
 @media screen and (max-width:1024px) {
     .leftImageContainer{
         width: 50%;
